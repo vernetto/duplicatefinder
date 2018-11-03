@@ -16,6 +16,7 @@ public class ScanComponent {
 
 	@ShellMethod("Scan a folder for all files")
 	public String scanfolder(@ShellOption() String folder) throws Exception {
+
 		// invoke service
 		return service.scan(folder);
 	}
