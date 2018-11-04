@@ -35,7 +35,7 @@ public class ScanService {
 					scanitems.add(item);
 				}
 				if (file.isDirectory() && recursive) {
-					
+					scan(file.getAbsolutePath(), recursive, scanitems);
 				}
 			}
 		}
