@@ -21,21 +21,26 @@ public class ScanService {
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
 			for (Path entry : stream) {
 				File file = entry.toFile();
-				if (file.isFile()) {
-					FileInputStream fis = new FileInputStream(file);
-					String md5 = DigestUtils.md5Hex(fis);
-					fis.close();
-					String filename = file.getCanonicalPath();
-					System.out.println(filename + " md5=" + md5);
-					ScanItem item = new ScanItem();
-					item.setFilename(filename);
-					item.setMd5(md5);
-					item.setSize(file.length());
-					item.setTouchdate(file.lastModified());
-					scanitems.add(item);
-				}
-				if (file.isDirectory() && recursive) {
-					scan(file.getAbsolutePath(), recursive, scanitems);
+				try {
+					if (file.isFile()) {
+						FileInputStream fis = new FileInputStream(file);
+						String md5 = DigestUtils.md5Hex(fis);
+						fis.close();
+						String filename = file.getCanonicalPath();
+						System.out.println(filename + " md5=" + md5);
+						ScanItem item = new ScanItem();
+						item.setFilename(filename);
+						item.setMd5(md5);
+						item.setSize(file.length());
+						item.setTouchdate(file.lastModified());
+						scanitems.add(item);
+					}
+					if (file.isDirectory() && recursive) {
+						scan(file.getAbsolutePath(), recursive, scanitems);
+					}
+				} catch (Throwable t) {
+					System.err.println("error processing folder " + folder + " file " + file.getName());
+					t.printStackTrace(System.err);
 				}
 			}
 		}
