@@ -18,10 +18,12 @@ public class ScanService {
 
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
 			for (Path entry : stream) {
-				FileInputStream fis = new FileInputStream(entry.toFile());
-				String md5 = DigestUtils.md5Hex(fis);
-				fis.close();
-				System.out.println(entry.toString() + " md5=" + md5);
+				if (entry.toFile().isFile()) {
+					FileInputStream fis = new FileInputStream(entry.toFile());
+					String md5 = DigestUtils.md5Hex(fis);
+					fis.close();
+					System.out.println(entry.toString() + " md5=" + md5);
+				}
 			}
 		}
 		return null;
