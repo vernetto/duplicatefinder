@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @ShellComponent
 public class ScanComponent {
@@ -16,9 +18,14 @@ public class ScanComponent {
 
 	@ShellMethod("Scan a folder for all files")
 	public String scanfolder(@ShellOption() String folder) throws Exception {
-
-		// invoke service
 		return service.scan(folder);
+	}
+	
+	@ShellMethod("display current user")
+	public String whoami() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(auth.getPrincipal());
+		return "";
 	}
 
 }
